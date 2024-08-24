@@ -1,0 +1,35 @@
+git clone https://github.com/calcom/docker.git
+
+cd docker
+
+cp .env.example .env
+
+docker compose up -d
+
+ -----optional-------
+
+To run Cal.com web app and Prisma Studio against a remote database, ensure that DATABASE_URL is configured for an available database and run:
+
+docker compose up -d calcom studio
+
+To run only the Cal.com web app, ensure that DATABASE_URL is configured for an available database and run:
+
+docker compose up -d calcom
+
+
+
+-----------to update-----------
+
+docker compose down
+
+docker compose pull
+
+docker compose up -d
+
+
+
+
+Notes:
+- In all instances, the .env file must be updated by editing the NEXTAUTH_SECRET and CALENDSO_ENCRYPTION_KEY by using a random string through the command `openssl rand -base64 32`. Then rebuild with docker compose up -d . 
+
+- Container must link to an actual domain to be able to link to all integrations and work fully.
