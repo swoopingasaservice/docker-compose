@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  docmost:
+    image: docmost/docmost:latest
+    depends_on:
+      - db
+      - redis
+    environment:
+      APP_URL: "http://localhost:3000"
+      APP_SECRET: "bSFQ3aXQ4OrcBsYsU5gBnAKQ6cwUeL2koeeB3aWSFfA="
+      DATABASE_URL: "postgresql://docmost:Z7qibpk8vHngvy5oo6wlqQ==@db:5432/docmost?schema=public"
+      REDIS_URL: "redis://redis:6379"
+      SMTP_HOST: "email-smtp.us-east-1.amazonaws.com"
+      SMTP_PORT: "587"
+      SMTP_USER: "AKIAYJIBUXQOSLDODZST"
+      SMTP_PASS: "BHNoX2PYbVNXNcIcFK3Sb4lgudL3N7VyUvUxdl86ho10"
+      SMTP_TLS: "true"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - docmost:/app/data/storage
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: docmost
+      POSTGRES_USER: docmost
+      POSTGRES_PASSWORD: Z7qibpk8vHngvy5oo6wlqQ==
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  minio: 
+    image: 'bitnami/minio:latest'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/app/data/minio
+    environment:
+      - MINIO_ROOT_USER=user
+      - MINIO_ROOT_PASSWORD=oqTVRKU3aCVxu1qpLLgH8Q==
+
+volumes:
+  docmost:
+  db_data:
+  redis_data:
+  minio_data:
